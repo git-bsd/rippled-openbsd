@@ -1,0 +1,14 @@
+$OpenBSD$
+try to fix the issue of needing a raw boost compiled root available. 
+Index: Builds/CMake/deps/Boost.cmake
+--- Builds/CMake/deps/Boost.cmake.orig
++++ Builds/CMake/deps/Boost.cmake
+@@ -44,7 +44,7 @@ else()
+ endif()
+ # TBD:
+ # Boost_USE_DEBUG_RUNTIME:  When ON, uses Boost libraries linked against the
+-find_package(Boost 1.70 REQUIRED
++find_package(Boost 1.70.0 REQUIRED
+   COMPONENTS
+     chrono
+     container

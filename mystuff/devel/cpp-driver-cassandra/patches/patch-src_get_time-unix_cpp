@@ -1,0 +1,14 @@
+$OpenBSD$
+
+Index: src/get_time-unix.cpp
+--- src/get_time-unix.cpp.orig
++++ src/get_time-unix.cpp
+@@ -16,7 +16,7 @@
+ 
+ #include <unistd.h>
+ 
+-#if _POSIX_TIMERS > 0
++#if _POSIX_TIMERS > 0 || defined(__OpenBSD__)
+ 
+ #include "get_time.hpp"
+ 

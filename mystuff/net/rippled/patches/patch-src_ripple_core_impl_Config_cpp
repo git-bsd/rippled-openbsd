@@ -1,0 +1,57 @@
+$OpenBSD$
+
+Index: src/ripple/core/impl/Config.cpp
+--- src/ripple/core/impl/Config.cpp.orig
++++ src/ripple/core/impl/Config.cpp
+@@ -79,7 +79,6 @@ getMemorySize()
+ }  // namespace ripple
+ 
+ #endif
+-
+ #if BOOST_OS_MACOS
+ #include <sys/sysctl.h>
+ #include <sys/types.h>
+@@ -103,9 +102,35 @@ getMemorySize()
+ }  // namespace detail
+ }  // namespace ripple
+ #endif
++#if BOOST_OS_BSD 
+ 
++#include <sys/sysctl.h>
++#include <sys/types.h>
++
+ namespace ripple {
++namespace detail {
++//added HW_PHYSMEM64 instead of hw_memsize
++//
+ 
++[[nodiscard]] std::uint64_t
++getMemorySize()
++{
++    int mib[] = {CTL_HW, HW_PHYSMEM64};
++    std::int64_t ram = 0;
++    size_t size = sizeof(ram);
++
++    if (sysctl(mib, 2, &ram, &size, NULL, 0) == 0)
++        return static_cast<std::uint64_t>(ram);
++
++    return 0;
++}
++
++}  // namespace detail
++}  // namespace ripple
++#endif
++
++namespace ripple {
++
+ // clang-format off
+ // The configurable node sizes are "tiny", "small", "medium", "large", "huge"
+ inline constexpr std::array<std::pair<SizedItem, std::array<int, 5>>, 12>
+@@ -265,6 +290,7 @@ getEnvVar(char const* name)
+ constexpr FeeUnit32 Config::TRANSACTION_FEE_BASE;
+ 
+ Config::Config()
++
+     : j_(beast::Journal::getNullSink()), ramSize_(detail::getMemorySize())
+ {
+ }

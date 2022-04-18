@@ -1,0 +1,18 @@
+$OpenBSD$
+
+Index: src/ripple/basics/impl/make_SSLContext.cpp
+--- src/ripple/basics/impl/make_SSLContext.cpp.orig
++++ src/ripple/basics/impl/make_SSLContext.cpp
+@@ -387,8 +387,10 @@ get_context(std::string const& cipherList)
+     // exploitation of the bug described in CVE-2021-3499 (for details see
+     // https://www.openssl.org/news/secadv/20210325.txt) when linking against
+     // OpenSSL versions prior to 1.1.1k.
+-    SSL_CTX_set_options(c->native_handle(), SSL_OP_NO_RENEGOTIATION);
+-
++    //
++    // WATCH OUT I HAVE COMMENTED THIS OUT TO TRY TO COMPILE WITH LIBRESSL.
++    //
++    //SSL_CTX_set_options(c->native_handle(), SSL_OP_NO_RENEGOTIATION);
+     return c;
+ }
+ 

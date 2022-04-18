@@ -1,0 +1,17 @@
+$OpenBSD$
+
+Index: Builds/CMake/deps/Libarchive.cmake
+--- Builds/CMake/deps/Libarchive.cmake.orig
++++ Builds/CMake/deps/Libarchive.cmake
+@@ -26,6 +26,11 @@ if (NOT local_libarchive)
+         # also, APPLE seems to need iconv...maybe linux does too (TBD)
+         target_link_libraries (archive_lib
+           INTERFACE iconv ${libarchive_PC_STATIC_LIBRARIES})
++      elseif (UNIX AND static AND libarchive_PC_STATIC_LIBRARIES)
++        message(STATUS "NOTE: libarchive static libs: ${libarchive_PC_STATIC_LIBRARIES}")
++        # EDIT BY BRAM, HOPE THIS FIXES BUILD ON OPENBSD
++        target_link_libraries (archive_lib
++          INTERFACE iconv ${libarchive_PC_STATIC_LIBRARIES})
+       endif ()
+   else ()
+     ## now try searching using the minimal find module that cmake provides

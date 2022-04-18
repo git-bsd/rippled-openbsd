@@ -1,0 +1,14 @@
+#!/bin/ksh
+# this is a test, needs refining..
+# $OpenBSD: rc.template,v 1.13 2021/05/02 09:06:44 ajacoutot Exp $
+
+daemon="/usr/local/bin/rippled"
+daemon_flags=" --net --silent --debug --conf=/etc/rippled/rippled.cfg"
+daemon_timeout="300"
+daemon_user="_rippled"
+
+. /etc/rc.d/rc.subr
+
+rc_bg=YES
+
+rc_cmd $1

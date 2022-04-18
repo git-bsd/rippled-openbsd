@@ -1,0 +1,23 @@
+$OpenBSD$
+
+Index: boost/process/detail/posix/wait_group.hpp
+--- boost/process/detail/posix/wait_group.hpp.orig
++++ boost/process/detail/posix/wait_group.hpp
+@@ -35,7 +35,7 @@ inline void wait(const group_handle &p, std::error_cod
+         }
+ 
+         //ECHILD --> no child processes left.
+-        ret = ::waitid(P_PGID, p.grp, &status, WEXITED | WNOHANG);
++        //ret = ::waitid(P_PGID, p.grp, &status, WEXITED | WNOHANG);
+     } 
+     while ((ret != -1) || (errno != ECHILD));
+    
+@@ -71,7 +71,7 @@ inline bool wait_until(
+ 
+     while (!(timed_out = (Clock::now() > time_out)))
+     {
+-        ret = ::waitid(P_PGID, p.grp, &siginfo, WEXITED | WSTOPPED | WNOHANG);
++        //ret = ::waitid(P_PGID, p.grp, &siginfo, WEXITED | WSTOPPED | WNOHANG);
+         if (ret == -1)
+         {
+             if ((errno == ECHILD) || (errno == ESRCH))

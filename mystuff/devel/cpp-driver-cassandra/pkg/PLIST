@@ -1,0 +1,8 @@
+@comment $OpenBSD: PLIST,v$
+include/cassandra.h
+include/dse.h
+lib/libcassandra.so.2
+lib/libcassandra.so.2.16.2
+@static-lib lib/libcassandra_static.a
+lib/pkgconfig/cassandra.pc
+lib/pkgconfig/cassandra_static.pc

@@ -1,0 +1,7 @@
+found rippled.cfg and validators.txt in /etc/rippled
+you need to check /usr/share/examples/rippled/
+there might be some changes in the cfg files
+
+WATCH FOR IT
+i have changed the default data directory from /var/lib/rippled to /var/run/rippled
+seems like littering a system to create /var/lib on a system where it is not there.

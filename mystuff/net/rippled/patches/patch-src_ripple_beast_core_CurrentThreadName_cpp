@@ -1,0 +1,27 @@
+$OpenBSD$
+
+Index: src/ripple/beast/core/CurrentThreadName.cpp
+--- src/ripple/beast/core/CurrentThreadName.cpp.orig
++++ src/ripple/beast/core/CurrentThreadName.cpp
+@@ -103,6 +103,21 @@ setCurrentThreadNameImpl(std::string_view name)
+ }  // namespace beast::detail
+ #endif  // BOOST_OS_LINUX
+ 
++#if BOOST_OS_BSD
++#include <pthread.h>
++#include <pthread_np.h>
++
++namespace beast::detail {
++
++inline void
++setCurrentThreadNameImpl(std::string_view name)
++{
++    pthread_set_name_np(pthread_self(), name.data());
++}
++
++}  // namespace beast::detail
++#endif  // BOOST_OS_BSD
++
+ namespace beast {
+ 
+ namespace detail {

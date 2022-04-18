@@ -1,0 +1,14 @@
+$OpenBSD$
+
+Index: src/ripple/app/misc/NetworkOPs.cpp
+--- src/ripple/app/misc/NetworkOPs.cpp.orig
++++ src/ripple/app/misc/NetworkOPs.cpp
+@@ -2575,7 +2575,7 @@ NetworkOPsImp::getServerInfo(bool human, bool admin, b
+ 
+ #if RIPPLED_REPORTING
+             std::int64_t const dbAge =
+-                std::max(m_ledgerMaster.getValidatedLedgerAge().count(), 0L);
++                std::max<std::int64_t>(m_ledgerMaster.getValidatedLedgerAge().count(), 0L);
+             l[jss::age] = Json::UInt(dbAge);
+ #else
+             constexpr std::chrono::seconds highAgeThreshold{1000000};

@@ -1,0 +1,9 @@
+This is my first port
+For any tips, tricks, please take up contact with me
+
+Rippled is a blockchain daemon that powers the XRP ledger
+There is 2 flavors included in this port, regular or p2p mode
+And reporting mode https://xrpl.org/build-run-rippled-in-reporting-mode.html
+I'm working on generating some more packaged docs/manpages
+For now i suggest you look on xrpl.org for reference.
+

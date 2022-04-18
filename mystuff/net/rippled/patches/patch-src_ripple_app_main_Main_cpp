@@ -1,0 +1,25 @@
+$OpenBSD$
+
+Index: src/ripple/app/main/Main.cpp
+--- src/ripple/app/main/Main.cpp.orig
++++ src/ripple/app/main/Main.cpp
+@@ -58,14 +58,15 @@
+ 
+ // Do we know the plaform we're compiling on? If you're adding new platforms
+ // modify this check accordingly.
+-#if !BOOST_OS_LINUX && !BOOST_OS_WINDOWS && !BOOST_OS_MACOS
++#if !BOOST_OS_LINUX && !BOOST_OS_WINDOWS && !BOOST_OS_MACOS && !BOOST_OS_BSD
+ #error Supported platforms are: Linux, Windows and MacOS
+ #endif
+ 
+ // Ensure that precisely one platform is detected.
+-#if (BOOST_OS_LINUX && (BOOST_OS_WINDOWS || BOOST_OS_MACOS)) || \
+-    (BOOST_OS_MACOS && (BOOST_OS_WINDOWS || BOOST_OS_LINUX)) || \
+-    (BOOST_OS_WINDOWS && (BOOST_OS_LINUX || BOOST_OS_MACOS))
++#if (BOOST_OS_LINUX && (BOOST_OS_WINDOWS || BOOST_OS_MACOS || BOOST_OS_BSD)) || \
++    (BOOST_OS_MACOS && (BOOST_OS_WINDOWS || BOOST_OS_LINUX || BOOST_OS_BSD)) || \
++    (BOOST_OS_WINDOWS && (BOOST_OS_LINUX || BOOST_OS_MACOS || BOOST_OS_BSD)) || \
++    (BOOST_OS_BSD && (BOOST_OS_WINDOWS || BOOST_OS_MACOS || BOOST_OS_LINUX))
+ #error Multiple supported platforms appear active at once
+ #endif
+ 
