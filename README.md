@@ -24,7 +24,7 @@ I did do my best thus far to have the install and uninstall process clean up aft
 
 Before you start, you need a working ports tree see the working with ports section https://www.openbsd.org/faq/ports/
 ``` sh
-git clone https://github.com/git-bsd/rippled-port-for-openbsd
+git clone https://github.com/git-bsd/rippled-openbsd
 cp -r rippled-port-for-openbsd/mystuff /usr/ports/
 cd /usr/ports/mystuff/net/rippled/
 doas make install-depends
