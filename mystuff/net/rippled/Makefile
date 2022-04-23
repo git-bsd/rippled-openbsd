@@ -1,17 +1,21 @@
 # $OpenBSD: Makefile.template,v 1.90 2021/02/25 21:59:27 sthen Exp $
 
 COMMENT-reporting =     XRP ledger reporting node
-COMMENT = 	XRP ledger regular node
+COMMENT-main = 	XRP ledger regular node
 
 VERSION =       1.9.0
 DISTNAME =      rippled-${VERSION}
-PKGNAME =       ${DISTNAME}
-
 CATEGORIES =    net
-
 HOMEPAGE =      https://xrpl.org
-
 MAINTAINER =    Bram Janssen <admin@7ce.nl>
+
+
+
+PKGNAME =               ${DISTNAME}
+PKGNAME-main =          ${DISTNAME}
+PKGNAME-reporting =     rippled-reporting-${VERSION}
+
+#MULTI_PACKAGES =     -main -reporting
 
 # ISC License
 PERMIT_PACKAGE =        Yes
@@ -32,59 +36,51 @@ COMPILER =              base-clang
 COMPILER_LANGS =        c++
 
 BUILD_DEPENDS +=        devel/cmake \
-                mystuff/devel/boost \
-                mystuff/devel/boost,-md \
-                mystuff/devel/grpc \
-                devel/protobuf 
-                        
+                        mystuff/devel/boost \
+                        mystuff/devel/boost,-md \
+                        mystuff/devel/grpc \
+                        devel/protobuf
 
-LIB_DEPENDS =   archivers/bzip2 \
-                archivers/libarchive \
-                archivers/lz4 \
-                archivers/zstd \
-                converters/libiconv \
-                security/libb2 
-
+LIB_DEPENDS =           archivers/bzip2 \
+                        archivers/libarchive \
+                        archivers/lz4 \
+                        archivers/zstd \
+                        converters/libiconv \
+                        security/libb2 
 SEPARATE_BUILD = YES
-
 MODULES =       devel/cmake
 
-MODCMAKE_VERBOSE =      yes
-MODCMAKE_COLOR = yes
-CONFIGURE_STYLE =       cmake
-
 FLAVORS =   main reporting
-
-FLAVOR ?=
-
-# turn unity and ninja off if build errors and unable to clearly see what caused it
-CONFIGURE_ARGS =	-DCMAKE_BUILD_TYPE=Release -Dstatic=true -Dunity=ON -Dtests=OFF \
-                    -Dvalidator_keys=ON
+FLAVOR ?= main
 
 
-USE_NINJA = YES
+MODCMAKE_VERBOSE =      yes
+MODCMAKE_COLOR =        yes
+CONFIGURE_STYLE =       cmake
+USE_NINJA =             YES
+MAKE_JOBS =             2
 
-.if ${FLAVOR:L:Mreporting}
 
+CONFIGURE_ARGS =	-DCMAKE_BUILD_TYPE=Debug -Dstatic=true -Dunity=ON -Dtests=OFF 
+
+
+.if ${FLAVOR:Mmain}
+CONFIGURE_ARGS += -Dvalidator_keys=ON
+.else
+#.if ${MULTI_PACKAGES:M-reporting}
 BUILD_DEPENDS +=     databases/postgresql \
                      devel/libuv \
                      devel/bison \
                      mystuff/devel/cpp-driver-cassandra
+AUTOCONF_VERSION = 2.71 
 
-MAKE_ENV =      AUTOCONF_VERSION=2.71 
-
-# tried LDFLAGS to include cass and uv, did not work
-# this is suboptimal as now it is included in every build step
 CONFIGURE_ARGS +=       -Dreporting=ON \
                         -Dcassandra=/usr/local/lib \
                         -Dcassandra_includes:PATH=/usr/local/include \
                         -DCMAKE_CXX_FLAGS_DEBUG="-lcassandra_static -luv -lstdc++"
-
 #USE_NINJA = YES
 .endif
 
-
-MAKE_JOBS = 2
 
 
 post-configure:
@@ -95,34 +91,28 @@ post-configure:
 
 
 
+.if ${FLAVOR:Mmain}
 post-build:
-	cd ${WRKBUILD}; cmake --build . --target validator-keys
-
-#	mkdir -p ${WRKBUILD}/validator-keys/build/gcc.test ; cd ${WRKBUILD}/validator-keys/build/gcc.test ; \
-#	cmake -DCMAKE_BUILD_TYPE=Release ../.. ;\
-
-#	cd ${WRKBUILD}/validator-keys/build ;\
-	
-	
+	cd ${WRKBUILD}; cmake --build . --target validator-keys 
+.endif
 
 post-install:
 	rm -rf ${PREFIX}/etc
-	${INSTALL_SCRIPT} ${WRKBUILD}/validator-keys/validator-keys \
-	    ${PREFIX}/bin
-	    #	cd ${WRKBUILD}; cmake --build . --target validator-keys/install
-
 	${INSTALL_DATA_DIR}  ${PREFIX}/share/examples/rippled
 	${INSTALL_DATA_DIR}  ${WRKINST}/${SYSCONFDIR}/rippled
 	sed -i 's/\/var\/lib/\/var\/run/g' ${WRKSRC}/cfg/*
 
-.if !${FLAVOR:L:Mreporting}
+.if ${FLAVOR:Mmain}
+	${INSTALL_SCRIPT} ${WRKBUILD}/validator-keys/validator-keys \
+	    ${PREFIX}/bin
 	${INSTALL_DATA}  ${WRKSRC}/cfg/rippled-example.cfg \
 	    ${PREFIX}/share/examples/rippled/rippled-example.cfg
 .endif
 
-.if ${FLAVOR:L:Mreporting}
+.if ${FLAVOR:Mreporting}
 	${INSTALL_DATA}  ${WRKSRC}/cfg/rippled-reporting.cfg \
 	    ${PREFIX}/share/examples/rippled/rippled-reporting.cfg
+	mv ${PREFIX}/bin/rippled-reporting ${PREFIX}/bin/rippled
 .endif
 
 	${INSTALL_DATA}  ${WRKSRC}/cfg/validators-example.txt \

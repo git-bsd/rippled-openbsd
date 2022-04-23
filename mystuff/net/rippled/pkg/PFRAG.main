@@ -1,0 +1,3 @@
+@comment $OpenBSD: PFRAG.main,v$
+@bin bin/validator-keys
+share/examples/rippled/rippled-example.cfg

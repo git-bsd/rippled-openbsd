@@ -20,7 +20,7 @@
 @owner
 @group
 @bin bin/rippled
-@bin bin/validator-keys
+%%main%%
 include/date/
 include/date/date.h
 include/ed25519-donna/
@@ -153,7 +153,7 @@ lib/cmake/date/dateTargets.cmake
 lib/cmake/ripple/
 lib/cmake/ripple/RippleConfig.cmake
 lib/cmake/ripple/RippleConfigVersion.cmake
-lib/cmake/ripple/RippleTargets-release.cmake
+lib/cmake/ripple/RippleTargets-debug.cmake
 lib/cmake/ripple/RippleTargets.cmake
 @static-lib lib/libed25519-donna.a
 @static-lib lib/libsecp256k1.a
@@ -161,16 +161,10 @@ lib/cmake/ripple/RippleTargets.cmake
 share/doc/rippled/
 share/doc/rippled/LICENSE.md
 share/examples/rippled/
-share/examples/rippled/rippled-example.cfg
-@mode 640
-@owner root
-@group _rippled
-@sample ${SYSCONFDIR}/rippled/rippled.cfg
-@mode
-@owner
-@group
+%%reporting%%
 share/examples/rippled/validators.txt
 @mode 640
 @owner root
 @group _rippled
+@sample ${SYSCONFDIR}/rippled/rippled.cfg
 @sample ${SYSCONFDIR}/rippled/validators.txt
