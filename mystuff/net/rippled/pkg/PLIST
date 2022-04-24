@@ -4,7 +4,7 @@
 @rcscript ${RCDIR}/rippled
 @comment if there is a better way to add logrotation i did not find it.
 @comment daily rotate the file, make tgz archive of old file, weekly delete files 7 days or older.
-@exec-add (crontab -l 2>/dev/null ; echo "@daily sh -c 'find /var/log/rippled -name \"debug.log\" -exec mv  {} {}.$(date  +%Y-%m-%d) \; ; rippled --conf=/etc/rippled/rippled.cfg logrotate; find /var/log/rippled/ -name \"*.log.????-??-??\" \( -exec tar zcf {}.tgz {} \; -exec rm -rf {} \; \)'") | crontab -
+@exec-add (crontab -l 2>/dev/null ; echo "@daily sh -c 'find /var/log/rippled -name \"debug.log\" -exec mv  {} {}.\$\(date  +%Y-%m-%d\) \; ; rippled --conf=/etc/rippled/rippled.cfg logrotate; find /var/log/rippled/ -name \"*.log.????-??-??\" \( -exec tar zcf {}.tgz {} \; -exec rm -rf {} \; \)'") | crontab -
 @exec-add (crontab -l 2>/dev/null ; echo "@weekly sh -c 'find /var/log/rippled/ -name \"*.tgz\" -mtime +7 -exec rm -rf {} \;'") | crontab -
 @comment this is a bit dangerous, but i believe it should be find
 @extraunexec {crontab -l 2>/dev/null | grep -v rippled}| crontab -
