@@ -5,6 +5,10 @@ https://openbsd.org
 https://xrpl.org
 https://github.com/ripple/rippled
 
+#### does this work?
+only on 7.0
+Working on 7.1 fix.
+
 ## Motivations
 1. I want to learn more about UNIX like operating systems.
 2. Learn more about the rippled software.
