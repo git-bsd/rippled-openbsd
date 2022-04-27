@@ -1,4 +1,8 @@
 cassandraDB CPP drivers.
 Author Bram Janssen <admin@7ce.nl>
 
+Not the optimal build, SSL is disabled.
+If i do enable it, since the update to openbsd 7.1 libressl 3.5.2
+It gives some errors about the BIO
+
 For feedback, please reach out to me.

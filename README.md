@@ -6,8 +6,10 @@ https://xrpl.org
 https://github.com/ripple/rippled
 
 #### does this work?
-It should at this moment work on 7.1-stable.
-(still need to test, but the main package compiles now with clang-13)
+It compiles currently on openbsd7.1-current
+Still need to do some tests but seems to work for now.
+If you want to use reporting mode with CassandraDB, the current version does not compile openssl in.
+Some BIO errors I need to figure out.
 
 ## Motivations
 1. I want to learn more about UNIX like operating systems.

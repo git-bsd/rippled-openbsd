@@ -1,6 +1,6 @@
 @comment $OpenBSD: PLIST,v$
-@newgroup _rippled:870
-@newuser _rippled:870:870:daemon:Rippled user:/var/empty:/sbin/nologin
+@newgroup _rippled:876
+@newuser _rippled:876:876:daemon:Rippled user:/var/empty:/sbin/nologin
 @rcscript ${RCDIR}/rippled
 @comment if there is a better way to add logrotation i did not find it.
 @comment daily rotate the file, make tgz archive of old file, weekly delete files 7 days or older.

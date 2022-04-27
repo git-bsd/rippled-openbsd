@@ -1,4 +1,6 @@
 include/cassandra.h
 include/dse.h
+#@lib lib/libcassandra.so.${LIBcassandra_VERSION}
 @static-lib lib/libcassandra_static.a
+lib/pkgconfig/cassandra.pc
 lib/pkgconfig/cassandra_static.pc

@@ -15,8 +15,6 @@ PKGNAME =               ${DISTNAME}
 PKGNAME-main =          ${DISTNAME}
 PKGNAME-reporting =     rippled-reporting-${VERSION}
 
-#MULTI_PACKAGES =     -main -reporting
-
 # ISC License
 PERMIT_PACKAGE =        Yes
 
@@ -35,13 +33,10 @@ DIST_SUBDIR =           rippled
 COMPILER =              base-clang
 COMPILER_LANGS =        c++
 
-BUILD_DEPENDS +=        devel/cmake \
-                        mystuff/devel/boost \
+BUILD_DEPENDS +=        mystuff/devel/boost \
                         mystuff/devel/boost,-md \
                         mystuff/devel/grpc \
                         devel/protobuf 
-#                        \
-#                        mystuff/devel/soci
 
 LIB_DEPENDS =           archivers/bzip2 \
                         archivers/libarchive \
@@ -64,20 +59,16 @@ MAKE_JOBS =             2
 
 
 CONFIGURE_ARGS =	-DCMAKE_BUILD_TYPE=Debug -Dstatic=true -Dunity=ON -Dtests=OFF
-#\
-#                    -Dsoci=/usr/local/lib/libsoci_core.a
-#                    -DCMAKE_CXX_FLAGS='-Wno-error -Wno-error=deprecated-copy '
-
 
 .if ${FLAVOR:Mmain}
 CONFIGURE_ARGS += -Dvalidator_keys=ON
 .else
-#.if ${MULTI_PACKAGES:M-reporting}
 BUILD_DEPENDS +=     databases/postgresql \
                      devel/libuv \
                      devel/bison \
                      mystuff/devel/cpp-driver-cassandra
-AUTOCONF_VERSION = 2.71 
+
+AUTOCONF_VERSION =      2.71 
 
 CONFIGURE_ARGS +=       -Dreporting=ON \
                         -Dcassandra=/usr/local/lib \

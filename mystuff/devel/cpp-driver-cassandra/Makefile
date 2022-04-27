@@ -20,6 +20,7 @@ PERMIT_PACKAGE =	Yes
 
 #WANTLIB =		???
 COMPILER =		base-clang
+#COMPILER =		ports-gcc
 
 MODULES =		devel/cmake
 
@@ -27,8 +28,12 @@ LIB_DEPENDS =		devel/libuv \
                     security/heimdal
 
 CONFIGURE_STYLE =	cmake
-CONFIGURE_ARGS =	-DCASS_BUILD_STATIC=ON -DCASS_BUILD_SHARED=ON \
+CONFIGURE_ARGS =	-DCASS_BUILD_STATIC=ON -DCASS_BUILD_SHARED=OFF \
                     -DCMAKE_BUILD_TYPE=Debug \
-                    -DCASS_USE_STATIC_LIBS=OFF 
+                    -DCASS_USE_STATIC_LIBS=OFF \
+                    -DCASS_USE_OPENSSL=OFF
+# above i disable openssl, this is probably a stupid idea.
+# for now, i cant seem to figure out what goes wrong here
+# might be the new openssl version, im not sure yet.
 
 .include <bsd.port.mk>
