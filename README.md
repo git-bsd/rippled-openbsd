@@ -5,11 +5,11 @@ https://openbsd.org
 https://xrpl.org
 https://github.com/ripple/rippled
 
-#### does this work?
-It compiles currently on openbsd7.1-current
-Still need to do some tests but seems to work for now.
-If you want to use reporting mode with CassandraDB, the current version does not compile openssl in.
-Some BIO errors I need to figure out.
+#### does this work? 
+NO.
+Something is wrong with the commandline interface, logs seem to show it does do some stuff.
+Coredumps pretty quickly..
+Will investigate further.
 
 ## Motivations
 1. I want to learn more about UNIX like operating systems.
