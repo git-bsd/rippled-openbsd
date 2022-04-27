@@ -1,0 +1,11 @@
+Index: Builds/CMake/RippledCompiler.cmake
+--- Builds/CMake/RippledCompiler.cmake.orig
++++ Builds/CMake/RippledCompiler.cmake
+@@ -99,7 +99,6 @@ else ()
+   # not MSVC
+   target_compile_options (common
+     INTERFACE
+-      $<$<BOOL:${werr}>:-Werror>
+       $<$<COMPILE_LANGUAGE:CXX>:
+         -frtti
+         -Wnon-virtual-dtor

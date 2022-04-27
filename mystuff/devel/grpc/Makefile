@@ -21,7 +21,8 @@ LIB_DEPENDS =       devel/protobuf
 
 RUN_DEPENDS =       net/libcares
 
-COMPILER=   base-clang ports-gcc
+#COMPILER=   base-clang ports-gcc
+COMPILER=   base-clang
 
 WANTLIB += ${COMPILER_LIBCXX} c m
 WANTLIB += protobuf protoc
@@ -37,35 +38,45 @@ CONFIGURE_ARGS =    -DCMAKE_BUILD_TYPE=Release \
             -DgRPC_PROTOBUF_PROVIDER=package \
             -DgRPC_ZLIB_PROVIDER=package \
             ../..
+#            -DCMAKE_CXX_FLAGS='-Wno-error -Wno-error=unused-but-set-variable'\
 
 
 WRKBUILD =  ${WRKSRC}/cmake/build
-J_FLAG !=   expr "`sysctl hw.ncpu | cut -d "=" -f2` - 1" | bc
+MAKE_JOBS = 4
+
+#CXX_FLAGS = -Wno-error=unused-but-set-variable
 
 pre-configure:
 	rm -rf -- ${WRKSRC}; mkdir -p ${WRKSRC};\
-	cd ${WRKSRC}; git clone -j ${J_FLAG} -b ${GH_TAGNAME} https://github.com/${GH_ACCOUNT}/${GH_PROJECT} . ;\
-	git submodule update --init -j ${J_FLAG} ;\
+	cd ${WRKSRC}; git clone -j ${MAKE_JOBS} -b ${GH_TAGNAME} https://github.com/${GH_ACCOUNT}/${GH_PROJECT} . ;\
+	git submodule update --init -j ${MAKE_JOBS} ;\
 	sed -i "s/LIBS = dl rt m pthread/LIBS = m pthread/g" Makefile ;\
 	sed -i "s/#define HOST_NAME_MAX 64/#define HOST_NAME_MAX 255/g" \
 	    third_party/benchmark/src/sysinfo.cc ;\
 	sed -i "s/for (int i = 0; i < size /for (unsigned long int i = 0; i < size /g" \
 	    third_party/boringssl/third_party/googletest/src/gtest-port.cc ;\
 	sed -i "s/struct kinfo_proc info\[mib\[5\]\]//g" \
-	    third_party/boringssl/third_party/googletest/src/gtest-port.cc
+	    third_party/boringssl/third_party/googletest/src/gtest-port.cc 
+
+#	sed -i 's/set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${_gRPC_C_CXX_FLAGS}")/set(CMAKE_CXX_FLAGS "${_gRPC_C_CXX_FLAGS} ${CMAKE_CXX_FLAGS}")/g' \
+#	    ${WRKSRC}/CMakeLists.txt
+
 
 do-configure:
 	mkdir -p ${WRKBUILD}
 	cd ${WRKBUILD} ; cmake ${CONFIGURE_ARGS}
-
+	find ${WRKSRC}/cmake/build/third_party/benchmark -name flags.make -exec sed -i "s/\-Werror//g" {} \;
+	find ${WRKSRC}/cmake/build/third_party/benchmark -name link.txt -exec sed -i "s/\-Werror//g" {} \;
+    
 post-configure:
 	cd ${WRKSRC}/cmake; find . -type f -name link.txt -print0 | xargs -0 sed -i "s/\-lrt//g"
 
 do-build:
-	cd ${WRKBUILD} ; make -j ${J_FLAG}
+	cd ${WRKBUILD} ; make -j ${MAKE_JOBS} 
+#	-Wno-error=unused-but-set-variable
 
 do-install:
-	cd ${WRKBUILD}; make install -j ${J_FLAG}
+	cd ${WRKBUILD}; make install -j ${MAKE_JOBS}
 
 
 post-install:

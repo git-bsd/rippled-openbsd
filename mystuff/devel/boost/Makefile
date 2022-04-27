@@ -1,23 +1,18 @@
-# $OpenBSD: Makefile,v 1.117 2021/09/19 05:23:29 rsadowski Exp $
-
-ONLY_FOR_ARCHS-md = aarch64 amd64 arm i386 mips64 mips64el powerpc powerpc64 riscv64
+NOT_FOR_ARCHS-md = alpha hppa sparc64
 
 COMMENT-main=	free peer-reviewed portable C++ source libraries
 COMMENT-md=	machine-dependent libraries for boost
 
-# Bram <admin@7ce.nl> ; I added 1 patch that was giving me issues. 
-
-VERSION=	1.76.0
+VERSION=	1.78.0
 EPOCH =		1
 DISTNAME=	boost_${VERSION:S/./_/g}
-PKGNAME-main=	boost-${VERSION}
-PKGNAME-md=	boost-md-${VERSION}
+PKGNAME=	boost-${VERSION}
 CATEGORIES=	mystuff/devel
 MASTER_SITES=	https://boostorg.jfrog.io/artifactory/main/release/${VERSION}/source/
 EXTRACT_SUFX=	.tar.bz2
 FIX_EXTRACT_PERMISSIONS =	Yes
 
-SO_VERSION=	17.0
+SO_VERSION=	19.0
 BOOST_LIBS=	boost_atomic-mt \
 		boost_chrono-mt boost_chrono \
 		boost_container-mt boost_container \
@@ -37,13 +32,16 @@ BOOST_LIBS=	boost_atomic-mt \
 		boost_math_tr1f-mt boost_math_tr1f \
 		boost_math_tr1l-mt boost_math_tr1l \
 		boost_nowide-mt boost_nowide \
-		boost_numpy38-mt boost_numpy38 \
+		boost_numpy39-mt boost_numpy39 \
 		boost_prg_exec_monitor-mt boost_prg_exec_monitor \
 		boost_program_options-mt boost_program_options \
-		boost_python38-mt boost_python38 \
+		boost_python39-mt boost_python39 \
 		boost_random-mt boost_random \
 		boost_regex-mt boost_regex \
 		boost_serialization-mt boost_serialization \
+		boost_stacktrace_addr2line-mt boost_stacktrace_addr2line \
+		boost_stacktrace_basic-mt boost_stacktrace_basic \
+		boost_stacktrace_noop-mt boost_stacktrace_noop \
 		boost_system-mt boost_system \
 		boost_thread-mt \
 		boost_timer-mt boost_timer \
@@ -54,14 +52,8 @@ BOOST_LIBS=	boost_atomic-mt \
 
 # MD
 BOOST_LIBS+=	boost_context-mt \
-		boost_coroutine boost_coroutine-mt \
-		boost_fiber-mt \
-		boost_stacktrace_addr2line \
-		boost_stacktrace_addr2line-mt \
-		boost_stacktrace_basic \
-		boost_stacktrace_basic-mt \
-		boost_stacktrace_noop \
-		boost_stacktrace_noop-mt
+		boost_coroutine-mt boost_coroutine \
+		boost_fiber-mt
 
 .for _lib in ${BOOST_LIBS}
 SHARED_LIBS+=	${_lib} ${SO_VERSION}
@@ -70,14 +62,15 @@ SHARED_LIBS+=	${_lib} ${SO_VERSION}
 HOMEPAGE=	https://www.boost.org/
 
 MAINTAINER=	Brad Smith <brad@comstyle.com> \
-		Rafael Sadowski <rsadowski@openbsd.org> 
+		Rafael Sadowski <rsadowski@openbsd.org>
 
 # Boost
 PERMIT_PACKAGE=	Yes
 
-WANTLIB += ${COMPILER_LIBCXX} bz2 icudata icui18n icuuc m z
+WANTLIB=	${COMPILER_LIBCXX} bz2 icudata icui18n icuuc m z
+WANTLIB-md=	${COMPILER_LIBCXX} boost_filesystem-mt m
 
-COMPILER= base-clang ports-gcc
+COMPILER=	base-clang ports-gcc
 
 MULTI_PACKAGES=	-main -md
 
@@ -90,9 +83,6 @@ LIB_DEPENDS=	archivers/bzip2 \
 		textproc/icu4c
 
 LIB_DEPENDS-md=	devel/boost
-
-WANTLIB-md+=	${COMPILER_LIBCXX} m boost_chrono-mt boost_filesystem-mt \
-		boost_thread-mt
 
 .include <bsd.port.arch.mk>
 
@@ -110,8 +100,8 @@ BJAM_CONFIG=	-sICU_PATH=${LOCALBASE} \
 		-j${MAKE_JOBS} \
 		--layout=tagged-1.66 \
 		pch=off \
-		cflags='${CFLAGS} -pthread' \
-		cxxflags='${CXXFLAGS} -pthread' \
+		cflags='${CFLAGS}' \
+		cxxflags='${CXXFLAGS}' \
 		variant=release \
 		link=static,shared \
 		threading=single,multi \
@@ -121,7 +111,7 @@ BOOTSTRAP=	--with-bjam=${WRKSRC}/bjam \
 		--with-toolset=${TOOLSET} \
 		--with-python=${MODPY_BIN}
 .if !${BUILD_PACKAGES:M-md}
-BOOTSTRAP+=	--without-libraries=context,coroutine,fiber,stacktrace
+BOOTSTRAP+=	--without-libraries=context,coroutine,fiber
 .endif
 
 # python.port.mk makes assumptions about an empty CONFIGURE_STYLE

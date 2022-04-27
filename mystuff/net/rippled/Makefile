@@ -39,7 +39,9 @@ BUILD_DEPENDS +=        devel/cmake \
                         mystuff/devel/boost \
                         mystuff/devel/boost,-md \
                         mystuff/devel/grpc \
-                        devel/protobuf
+                        devel/protobuf 
+#                        \
+#                        mystuff/devel/soci
 
 LIB_DEPENDS =           archivers/bzip2 \
                         archivers/libarchive \
@@ -61,7 +63,10 @@ USE_NINJA =             YES
 MAKE_JOBS =             2
 
 
-CONFIGURE_ARGS =	-DCMAKE_BUILD_TYPE=Debug -Dstatic=true -Dunity=ON -Dtests=OFF 
+CONFIGURE_ARGS =	-DCMAKE_BUILD_TYPE=Debug -Dstatic=true -Dunity=ON -Dtests=OFF
+#\
+#                    -Dsoci=/usr/local/lib/libsoci_core.a
+#                    -DCMAKE_CXX_FLAGS='-Wno-error -Wno-error=deprecated-copy '
 
 
 .if ${FLAVOR:Mmain}
@@ -87,8 +92,12 @@ post-configure:
 	find ${WRKBUILD} -type f \
 	    \( -name build.ninja -o -name link.txt \)\
 	    -exec sed -i -e "s/\-lrt//g" -e "s/\-ldl//g" {} \;
-	find  ${WRKSRC}/.nih_c/ -type f -name posix_file.ipp -exec sed -i '/#ifndef __APPLE__/,/#endif/d' {} \;
 
+#    find ${WRKSRC}/.nih_c
+	find  ${WRKSRC}/.nih_c/ -type f -name posix_file.ipp -exec sed -i '/#ifndef __APPLE__/,/#endif/d' {} \;
+# this could become a patch?
+	sed -i 's/format\-truncation/format\-truncation \-Wno\-error=deprecated-copy \-Wno-error/g' ${WRKSRC}/Builds/CMake/deps/Soci.cmake
+#	sed -i "s/\$\<\$\<BOOL:${werr}>:\-Werror>//g" ${WRKSRC}/Builds/CMake/RippledCompiler.cmake
 
 
 .if ${FLAVOR:Mmain}

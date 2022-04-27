@@ -6,8 +6,8 @@ https://xrpl.org
 https://github.com/ripple/rippled
 
 #### does this work?
-only on 7.0
-Working on 7.1 fix.
+It should at this moment work on 7.1-stable.
+(still need to test, but the main package compiles now with clang-13)
 
 ## Motivations
 1. I want to learn more about UNIX like operating systems.

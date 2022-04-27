@@ -1,0 +1,12 @@
+Index: Builds/CMake/deps/Soci.cmake
+--- Builds/CMake/deps/Soci.cmake.orig
++++ Builds/CMake/deps/Soci.cmake
+@@ -52,6 +52,8 @@ else()
+     # whenever we update the GIT_TAG above.
+     PATCH_COMMAND
+       ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_SOURCE_DIR}/Builds/CMake/soci_patch.cmake
++    PATCH_COMMAND
++      COMMAND sed -i "s/\-Werror//g" cmake/SociConfig.cmake
+     CMAKE_ARGS
+       -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER}
+       -DCMAKE_C_COMPILER=${CMAKE_C_COMPILER}
