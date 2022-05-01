@@ -185,4 +185,7 @@ share/examples/rippled/rippled-example.cfg
 @group _rippled
 @sample ${SYSCONFDIR}/rippled/rippled.cfg
 share/examples/rippled/validators.txt
+@mode 640
+@owner root
+@group _rippled
 @sample ${SYSCONFDIR}/rippled/validators.txt

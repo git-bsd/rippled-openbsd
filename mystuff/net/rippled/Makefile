@@ -118,7 +118,7 @@ post-install:
 
 .if ${FLAVOR:Mreporting}
 	${INSTALL_DATA}  ${WRKSRC}/cfg/rippled-reporting.cfg \
-	    ${PREFIX}/share/examples/rippled/rippled-reporting.cfg
+	    ${PREFIX}/share/examples/rippled/rippled-example.cfg
 	mv ${PREFIX}/bin/rippled-reporting ${PREFIX}/bin/rippled
 .endif
 
