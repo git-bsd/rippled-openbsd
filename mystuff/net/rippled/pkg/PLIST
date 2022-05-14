@@ -1,5 +1,5 @@
-@newgroup _rippled:878
-@newuser _rippled:878:_rippled:daemon:Rippled user:/nonexistent:/sbin/nologin
+@newgroup _rippled:880
+@newuser _rippled:880:_rippled:daemon:Rippled user:/nonexistent:/sbin/nologin
 @rcscript ${RCDIR}/rippled
 @comment if there is a better way to add logrotation i did not find it.
 @comment daily rotate the file, make tgz archive of old file, weekly delete files 7 days or older.
