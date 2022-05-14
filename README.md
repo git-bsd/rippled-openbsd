@@ -41,7 +41,7 @@ Because this port is not in the official ports tree yet, manually add the _rippl
 This could cause errors if in between me posting this, and you building this a new user has been added
 It is best to not blindly execute the below command, but check first if there is a user with the uid/gid 
 ```sh
-echo "878 _rippled        _rippled    mystuff/misc/rippled" >> /usr/ports/infrastructure/db/user.list
+echo "880 _rippled        _rippled    mystuff/misc/rippled" >> /usr/ports/infrastructure/db/user.list
 ```
 Next, we are ready to make the package with
 ```sh
