@@ -3,7 +3,7 @@
 COMMENT-reporting =     XRP ledger reporting node
 COMMENT-main = 	XRP ledger regular node
 
-VERSION =       1.9.0
+VERSION =       1.8.5
 DISTNAME =      rippled-${VERSION}
 CATEGORIES =    net
 HOMEPAGE =      https://xrpl.org
